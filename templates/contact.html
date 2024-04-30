@@ -1,0 +1,27 @@
+
+{% extends 'base.html' %}
+
+{% block title %}New Chat{% endblock %}
+
+{% block content %}
+
+<div class="#" style="padding-top: 140px;">
+    <h1 style="text-align: center;">Contact Optician</h1>
+    <form method="post" action="." style="padding-left: 80px; padding-right: 80px;">
+        {% csrf_token %}
+        <div class="bg-white rounded-xl shadow-lg p-12 space-y-4">
+            {{ form.as_p }}
+        </div>
+        {% if form.errors or form.non_field_errors %}
+            <div class="mt-4 bg-red-200 p-4 rounded-xl">
+                {% for field in form %}
+                    {{ field.errors }}
+                {% endfor %}
+                {{ form.non_field_errors }}
+            </div>
+        {% endif %}
+        <input type="submit" class="btn btn-primary mt-3" value="Send Message">
+    </form>
+</div>
+    
+{% endblock %}

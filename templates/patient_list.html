@@ -1,0 +1,55 @@
+
+{% extends 'base.html' %}
+
+{% block title %}Your Patients{% endblock %}
+
+{% block content %}
+
+<script src="https://cdn.tailwindcss.com"></script>
+    <div class="pb-6" style="margin-top: 150px;">
+        <div class="flex items-center justify-center mb-3 mt-2">
+            <form method="get" action="." class="flex items-center bg-white rounded-xl p-4">
+                <input name="query" class="w-full py-2 px-40 border rounded-md mr-4 focus:outline-none bg-cyan-100" type="text" value="{{ query }}" placeholder="Search Patient">
+                <button class="py-1 px-6 text-lg bg-teal-500 text-white rounded-md hover:bg-teal-700 focus:outline-none "><i class="bi bi-search"></i></button>
+
+                <a href="{% url 'user_patients' %}" class="ml-3 py-1 px-6 inline-block bg-indigo-500 hover:bg-indigo-900 text-lg rounded-xl text-white"><i class="bi bi-x-circle-fill"></i></a>
+            </form>
+        </div>
+        
+        <!--<hr class="my-6">-->
+
+    </div>
+
+<section id="doctors" class="doctors">
+    <div class="container" style="padding-top: 10PX;">
+
+      <div class="section-title">
+        <h2>Your Patients</h2>
+        
+      </div>
+
+      <div class="row">
+        {% if patients %}
+        {% for patient in patients %} 
+        <div class="col-lg-6">
+          <div class="member d-flex align-items-start">
+            <div class="pic" style="width: max-content; height: fit-content;"><i class="bi bi-person-circle"></i></div>
+            <div class="member-info">
+              <h4>{{ patient.first_name }} {{ patient.last_name }}</h4>
+              <span>Date Registered: {{patient.created_date}}</span>
+              <span>Next Appointment Date: {{patient.next_appointment_date}}</span>
+              <p>Eye condition: {{ patient.eye_condition }}</p>
+              <p>Treatment Description: {{ patient.treatment_description }}</p>
+              <a href="{%url 'patient_detail' patient.id%}" class="btn btn-primary" style="margin-top: 40px; width: 100%;">View More</a>
+            </div>
+          </div>
+        </div>
+        {% endfor %}
+        {% endif %}
+        {% if not patients %}
+        <h2 style="text-align: center; padding-top: 50px;">Oops.No related searches or have no user patients yet!<i class="bi bi-emoji-smile-fill"></i></h2>
+        {% endif %}
+    
+
+
+{%endblock%}

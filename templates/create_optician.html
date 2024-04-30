@@ -1,0 +1,102 @@
+
+{% extends "base.html" %}
+{%block title%}Enter Profile details{%endblock%}
+
+{% block content %}
+<style>
+    .btn-block {
+  width: 100%;
+}
+
+.btn-primary {
+  text-align: center;
+}
+</style>
+<div class="optic" style="padding-top: 120px; align-items: center;">
+<h1 style="text-align: center;">Profile Details</h1>
+  <div class="form-container" style="align-items: center;padding-left: 80px;padding-right: 80px;">
+  <form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <div id="map"></div>
+
+    <input type="submit" class="btn btn-primary mt-3" value="Add Optician" style="width: 100%;">
+  </form>
+</div>
+<!-- Include Leaflet.js library -->
+<link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+<script>
+  // Leaflet.js map code (same as provided)
+  let map;
+  let marker;
+  const latitudeInput = document.getElementById("id_latitude");
+  const longitudeInput = document.getElementById("id_longitude");
+
+  function initMap() {
+    map = L.map('map').setView([0, 0], 8);
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: '© <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors'
+    }).addTo(map);
+
+    map.on('click', function (e) {
+      updateMarker(e.latlng);
+    });
+  }
+
+  function updateMarker(latLng) {
+    if (marker) {
+      marker.setLatLng(latLng);
+    } else {
+      marker = L.marker(latLng, { draggable: true }).addTo(map);
+    }
+
+    latitudeInput.value = latLng.lat;
+    longitudeInput.value = latLng.lng;
+
+    marker.on('dragend', function (e) {
+      const updatedLatLng = marker.getLatLng();
+      latitudeInput.value = updatedLatLng.lat;
+      longitudeInput.value = updatedLatLng.lng;
+    });
+  }
+
+  function handleLocationError(error) {
+    console.log(error.message);
+  }
+
+  function getLocation() {
+    if (navigator.permissions) {
+      navigator.permissions.query({ name: 'geolocation' }).then(function (result) {
+        if (result.state === 'granted') {
+          navigator.geolocation.getCurrentPosition(function (position) {
+            const latLng = L.latLng(position.coords.latitude, position.coords.longitude);
+            updateMarker(latLng);
+          }, handleLocationError);
+        } else if (result.state === 'prompt') {
+          navigator.geolocation.getCurrentPosition(function (position) {
+            const latLng = L.latLng(position.coords.latitude, position.coords.longitude);
+            updateMarker(latLng);
+          }, handleLocationError);
+        } else if (result.state === 'denied') {
+          console.log('Location access denied.');
+        }
+      });
+    } else if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(function (position) {
+        const latLng = L.latLng(position.coords.latitude, position.coords.longitude);
+        updateMarker(latLng);
+      }, handleLocationError);
+    } else {
+      console.log('Geolocation is not supported by this browser.');
+    }
+  }
+
+  window.addEventListener('load', function () {
+    initMap();
+    getLocation();
+  });
+  // ...
+</script>
+</div>
+{% endblock %}

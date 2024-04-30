@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+
+{% block title %}Messages{% endblock %}
+
+{% block content %}
+<script src="https://cdn.tailwindcss.com"></script>
+    <div class="pb-6" style="margin-top: 150px;">
+        <div class="flex items-center justify-center mb-3 mt-2">
+            <form method="get" action="." class="flex items-center bg-white rounded-xl p-4">
+                <input name="query" class="w-full py-2 px-40 border rounded-md mr-4 focus:outline-none bg-cyan-100" type="text" value="{{ query }}" placeholder="Search messages">
+                <button class="py-1 px-6 text-lg bg-teal-500 text-white rounded-md hover:bg-teal-700 focus:outline-none "><i class="bi bi-search"></i></button>
+
+                <a href="{% url 'messages' %}" class="ml-3 py-1 px-6 inline-block bg-indigo-500 hover:bg-indigo-900 text-lg rounded-xl text-white"><i class="bi bi-x-circle-fill"></i></a>
+            </form>
+        </div>
+        
+{% if conversations|length > 0 %}
+    <div class="">
+        <div class="bg-black" style="padding-top: 120px; padding-left: 60px; padding-right: 60px;">
+            {% for conversation in conversations %}
+                <a href="{% url 'conversation' conversation.id %}">
+                    <div class="p-6 bg-gray-800 rounded-b-xl" style="padding-bottom: 10px;">
+                        <div class="flex items-center mb-4">
+                            <div class="pr-6">
+                               <!-- <img src="{{ conversation.optician.prof_image.url }}" alt="" class="w-20 rounded-xl" style="height:80px;width: 80px;">-->
+                            </div>
+                            <div>
+                                {% for member in conversation.members.all %}
+                                    {% if member != request.user %}
+                                        <p class="mb-1 font-semibold text-white">{{ member.username }}</p>
+                                        <p class="text-sm text-gray-500">{{ conversation.modified_at }}</p>
+                                        <p class="text-sm text-white">{{ conversation.item.name }}</p>
+                                    {% endif %}
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+                </a>
+            {% endfor %}
+        </div>
+    </div>
+{% else %}
+    <h3 class="font-bold text-lg text-white px-6 py-4">No Conversations Yet.</h3>
+{% endif %}
+{% endblock %}

@@ -1,0 +1,23 @@
+
+{% extends "base.html" %}
+{%block title%}Create Patient{%endblock%}
+{% block content %}
+<style>
+    .btn-block {
+  width: 100%;
+}
+
+.btn-primary {
+  text-align: center;
+}
+</style>
+
+  <div class="form-container" style="align-items: center;padding-left: 80px;padding-right: 80px; padding-top: 120px;">
+    <h1 style="text-align: center;">Create Patient</h1>
+    <form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <input type="submit" class="btn btn-primary mt-3" value="Add Patient" style="width: 100%;">
+  </form>
+</div>
+{% endblock %}

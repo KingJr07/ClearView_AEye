@@ -1,0 +1,33 @@
+
+
+{% extends 'base.html' %}
+
+{% block title %}Chat{% endblock %}
+
+{% block content %}
+<script src="https://cdn.tailwindcss.com"></script>
+    <div class="space-y-6 bg-cyan-800" style="padding-top: 120px;padding-bottom: 200px;">
+        {% for message in conversation.messages.all %}
+            <div class="p-4 {% if message.created_by == request.user %}flex justify-end{% else %}flex{% endif %}">
+                <div class="max-w-xs rounded-lg {% if message.created_by == request.user %}bg-green-500 text-white{% else %}bg-gray-200{% endif %} p-3">
+                    <p class="text-sm">
+                        <strong>{{ message.created_by.username }}</strong> | {{ message.created_at }}
+                    </p>
+                    <p class="mt-2">{{ message.content }}</p>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+    <form method="POST" action=".">
+        {% csrf_token %}
+        <div class="fixed bottom-0 w-full flex items-center" style="padding-bottom: 80px;">
+            <input name="content" class="w-full py-2 px-3 border rounded-xl mr-4" type="text" placeholder="Type your message">
+            <button class="flex items-center justify-center py-3 px-5 text-lg bg-teal-500 text-white rounded-full hover:bg-teal-700">
+                <svg class="w-5 h-5 mr-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
+                </svg>
+            </button>   
+        </div>
+        
+    </form>
+{% endblock %}

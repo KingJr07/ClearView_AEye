@@ -1,0 +1,50 @@
+
+{% extends 'base.html' %}
+
+{% block title %}Ophthalmologists{% endblock %}
+
+{% block content %}
+
+<script src="https://cdn.tailwindcss.com"></script>
+    <div class="pb-6" style="margin-top: 150px;">
+        <div class="flex items-center justify-center mb-3 mt-2">
+            <form method="get" action="." class="flex items-center bg-white rounded-xl p-4">
+                <input name="query" class="w-full py-2 px-40 border rounded-md mr-4 focus:outline-none bg-cyan-100" type="text" value="{{ query }}" placeholder="Search Ophthalmologist">
+                <button class="py-1 px-6 text-lg bg-teal-500 text-white rounded-md hover:bg-teal-700 focus:outline-none"><i class="bi bi-search"></i></button>
+
+                <a href="{% url 'opticians' %}" class="ml-3 py-1 px-6 inline-block bg-indigo-500 hover:bg-indigo-900 text-lg rounded-xl text-white"><i class="bi bi-x-circle-fill"></i></a>
+            </form>
+        </div>
+        
+        <hr class="my-6">
+
+    </div>
+   <!-- ======= Doctors Section ======= -->
+   <section id="doctors" class="doctors">
+    <div class="container" style="padding-top: 10px;">
+
+      <div class="section-title">
+        <h2>Ophthalmologists</h2>
+        <p>Our registered Ophthalmologists who use our trained multiclassifier retinal diagnosis model eyecareNet as a tool to effectively diagnose retinal infections</p>
+      </div>
+
+      <div class="row">
+        {% if opticians %}
+        {% for optician in opticians %} 
+        <div class="col-lg-6">
+          <div class="member d-flex align-items-start">
+            <div class="pic"><img src="{{ optician.prof_image.url }}" class="img-fluid" alt=""></div>
+            <div class="member-info">
+              <h4>{{ optician.name }}</h4>
+              <span>Location: {{optician.location_description}}</span>
+              <p>{{ optician.description }}</p>
+              <a href="{%url 'optician_detail' optician.id%}" class="btn btn-primary" style="width: 100%; margin-top: 60px;">View Optician Details</a>
+            </div>
+          </div>
+        </div>
+        {% endfor %}
+        {%else%}
+        <h2 style="text-align: center; padding-top: 50px;">Oops.No related searches or have no ophthalmologists yet! <i class="bi bi-emoji-smile-fill"></i></h2>
+        {% endif %}
+       
+{% endblock %}

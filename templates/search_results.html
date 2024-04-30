@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+
+{% block title %}Browse{% endblock %}
+
+{% block content %}
+<script src="https://cdn.tailwindcss.com"></script>
+    <div class="pb-6" style="margin-top: 150px;">
+        <div class="flex items-center justify-center mb-6 mt-4">
+            <form method="get" action="." class="flex items-center bg-white rounded-xl p-4">
+                <input name="query" class="w-full py-2 px-40 border rounded-md mr-4 focus:outline-none" type="text" value="{{ query }}" placeholder="Search Ophthalmologist">
+                <button class="py-1 px-6 text-lg bg-teal-500 text-white rounded-md hover:bg-teal-700 focus:outline-none"><i class="bi bi-search"></i></button>
+
+                <a href="{% url 'search_opticians' %}" class="ml-3 py-1 px-6 inline-block bg-indigo-500 hover:bg-indigo-900 text-lg rounded-xl text-white"><i class="bi bi-x-circle-fill"></i></a>
+            </form>
+        </div>
+        
+        <hr class="my-6">
+
+    </div>
+
+    <div class="col-span-3 bg-gray-200">
+        <div class="relative grid grid-cols-3 gap-3">
+            {% for optician in opticians %}
+                <div class="relative my-2">
+                    <a href="{% url 'optician_detail' optician.pk %}">
+                        <div class="relative">
+                            {% if optician.prof_image and optician.prof_image.url %}
+                                <img src="{{ optician.prof_image.url }}" class="rounded-t-xl object-cover transition-transform duration-300 transform-gpu hover:scale-110 " />
+                            {% endif %}
+                        </div>
+                        <div class="p-6 bg-white rounded-b-xl">
+                            <h2 class="text-xl">Name: {{ optician.name }}</h2>
+                            <p class="text-gray-500">Location: {{ optician.location_description }}</p>
+                        </div>
+                    </a>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+    
+{% endblock %}

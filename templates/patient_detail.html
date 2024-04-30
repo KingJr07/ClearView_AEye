@@ -1,0 +1,95 @@
+{% extends 'base.html' %}
+
+{% block title %}Patient Details{% endblock %}
+
+{% block content %}
+
+<section id="about" class="about">
+    <div class="container-fluid" style="padding-top: 100px;">
+  
+      <div class="row">
+        <h3 style="text-align: center;">Patient Details</h3>  
+        <div class="col-xl-7 col-lg-6 icon-boxes d-flex flex-column align-items-stretch justify-content-center py-5 px-lg-5">
+          <h3>Name: {{ patient.first_name }} {{ patient.last_name }}</h3>
+  
+          <div class="icon-box">
+            <div class="icon"><i class="bx bx-fingerprint"></i></div>
+            <h4 class="title"><a href="">Date of Birth</a></h4>
+            <p class="description"> {{ patient.date_of_birth }}</p>
+          </div>
+          <div class="icon-box">
+            <div class="icon"><i class="bx bx-gift"></i></div>
+            <h4 class="title"><a href="">Patient Phone Number</a></h4>
+            <p class="description">{{ patient.phone_number }}</p>
+          </div>
+          <div class="icon-box">
+            <div class="icon"><i class="bx bx-atom"></i></div>
+            <h4 class="title"><a href="">Gender</a></h4>
+            <p class="description">{{ patient.gender }}</p>
+          </div>
+          <div class="icon-box">
+            <div class="icon"><i class="bx bx-atom"></i></div>
+            <h4 class="title"><a href="">Registration Date</a></h4>
+            <p class="description">{{patient.created_date}}</p>
+          </div>
+          <div class="icon-box">
+            <div class="icon"><i class="bx bx-atom"></i></div>
+            <h4 class="title"><a href="">Eye condition</a></h4>
+            <p class="description">{{patient.eye_condition}}</p>
+          </div>
+          <div class="icon-box">
+            <div class="icon"><i class="bx bx-atom"></i></div>
+            <h4 class="title"><a href="">Treatment Description</a></h4>
+            <p class="description">{{patient.treatment_description}}</p>
+          </div>
+          <div class="icon-box">
+            <div class="icon"><i class="bx bx-atom"></i></div>
+            <h4 class="title"><a href="">Prescription</a></h4>
+            <p class="description">{{patient.prescription}}</p>
+          </div>
+          <div class="icon-box">
+            <div class="icon"><i class="bx bx-atom"></i></div>
+            <h4 class="title"><a href="">Next Appointment Date</a></h4>
+            <p class="description">{{patient.next_appointment_date}}</p>
+          </div>
+          {% if request.user != patient.created_by %}
+          <div class="icon-box" style="padding-top: 5px;">
+            <a href="" class="appointment-btn scrollto"><span></span> </a>
+          {%else%}
+            <a href="{% url 'delete_patient' patient.id %}" class="appointment-btn scrollto" style="margin-top: 10px; width: 40%; padding-left: 80px;">Delete Patient</a>
+            <a href="{% url 'edit_patient' patient.id %}" class="appointment-btn scrollto" style="margin-top: 10px; width: 40%;padding-left: 80px;">Edit Patient</a>
+          </div>
+          {%endif%}
+        </div>
+      </div>
+  
+    </div>
+</section><!-- End About Section -->
+<div class="container" style="padding-top: 10px;">
+    {% if predictions_data %}
+    <br>
+    <h2>Prediction Results</h2>
+    <table class="table">
+    <thead>
+    <tr>
+    <th>Label</th>
+    <th>Prediction Probability</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for prediction in predictions_data %}
+    <tr>
+    <td>{{ prediction.label }}</td>
+    <td>{{ prediction.prediction }}</td>
+    </tr>
+    {% endfor %}
+    </tbody>
+    </table>
+    {% else %}
+    <p>Unable to predict eye condition.</p>
+    {% endif %}
+</div>
+<br>
+<br>
+{%endblock%}
+
